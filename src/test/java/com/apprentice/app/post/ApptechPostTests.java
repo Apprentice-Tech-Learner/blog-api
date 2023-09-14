@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.apprentice.app.post.entity.ApptechPost;
-import com.apprentice.app.post.entity.ApptechPostRepository;
+import com.apprentice.app.service.post.entity.ApptechPost;
+import com.apprentice.app.service.post.entity.ApptechPostRepository;
 
 import java.util.List;
 
