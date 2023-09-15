@@ -18,7 +18,7 @@ public class Member extends BaseTimeEntity {
     @Id
     @Column(name = "id", unique = true, nullable = false)
     private String id;
-    @Column(length = 255, nullable = false)
+    @Column(nullable = false)
     private String password;
     @Column(length = 50, nullable = false)
     private String name;
