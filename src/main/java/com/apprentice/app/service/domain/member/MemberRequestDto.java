@@ -3,9 +3,11 @@ package com.apprentice.app.service.domain.member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @NoArgsConstructor
+@ToString
 public class MemberRequestDto {
     private String id;
     private String password;
