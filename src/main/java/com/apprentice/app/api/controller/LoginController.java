@@ -1,6 +1,7 @@
 package com.apprentice.app.api.controller;
 
 import com.apprentice.app.service.domain.member.MemberRequestDto;
+import com.apprentice.app.service.domain.token.TokenResponseDto;
 import com.apprentice.app.service.interfaces.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,27 @@ public class LoginController {
     public ResponseEntity<Object> signup(@RequestBody MemberRequestDto reqDto) {
         String id = memberService.signUp(reqDto);
 
-        if (id == null || id.isEmpty()) return ResponseEntity.badRequest().body("입력에 실패하였습니다. 잠시 후 다시 이용해주세요.");
-        else return ResponseEntity.ok().body(id.concat(" (이)가 입력 완료되었습니다."));
+        if (id == null || id.isEmpty()) {
+            return ResponseEntity.badRequest().body("입력에 실패하였습니다. 잠시 후 다시 이용해주세요.");
+        } else {
+            return ResponseEntity.ok()
+                    .body(memberService.login(reqDto));
+        }
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<Object> validate(@RequestBody MemberRequestDto reqDto) {
+        boolean isExist = memberService.isExistId(reqDto.getId());
+        if (!isExist) {
+            return ResponseEntity.status(403).body("아이디를 다시 확인해주세요.");
+        }
+
+        TokenResponseDto result = memberService.login(reqDto);
+        if (result == null) {
+            return ResponseEntity.status(401).body("계정정보가 일치하지 않습니다.");
+        } else {
+            return ResponseEntity.ok()
+                    .body(result);
+        }
     }
 }

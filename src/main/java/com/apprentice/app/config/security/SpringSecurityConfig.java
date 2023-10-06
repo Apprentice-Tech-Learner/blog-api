@@ -1,32 +1,44 @@
 package com.apprentice.app.config.security;
 
+import com.apprentice.app.filter.JwtAuthFilter;
+import com.apprentice.app.service.domain.token.TokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SpringSecurityConfig {
 
+    private final TokenProvider tokenProvider;
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-//        http.authorizeRequests().antMatchers("/api/**").permitAll();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .httpBasic().disable()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .antMatchers("/login/**").permitAll()
+                .antMatchers("/post/**").hasRole("USER")
+                .anyRequest().authenticated()
+                .and()
+                .addFilterBefore(new JwtAuthFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
 
-        httpSecurity
-                .cors().disable() //cors 제거 - api서버임
-                .csrf().disable() //csrf 임시 우회
-                .formLogin().disable(); //form submit disabled
-
-        return httpSecurity
-                .authorizeRequests(
-                        authorize -> authorize
-//                                .requestMatchers("/users/**").permitAll()
-                                .requestMatchers(new AntPathRequestMatcher("/login/**")).permitAll()
-                                .anyRequest().authenticated()
-                )
-                .build();
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }
