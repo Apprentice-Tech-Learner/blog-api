@@ -30,6 +30,7 @@ public class Post extends BaseTimeEntity {
     @Column(length = 50)
     private String writer;
     private int status;
+    private int series;
     @Column(length = 400)
     private String description;
 

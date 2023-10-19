@@ -1,6 +1,5 @@
 package com.apprentice.app.api.controller;
 
-import com.apprentice.app.service.domain.post.Post;
 import com.apprentice.app.service.domain.post.PostDetailResponseDto;
 import com.apprentice.app.service.domain.post.PostRequestDto;
 import com.apprentice.app.service.domain.post.PostResponseDto;
@@ -23,6 +22,7 @@ public class PostController {
 
     private final PostService postService;
 
+    // GET
     @GetMapping("/post/{id}")
     public ResponseEntity<Object> post(@PathVariable String id) {
         PostDetailResponseDto result;
@@ -42,6 +42,7 @@ public class PostController {
         return ResponseEntity.ok().body(postService.searchPostSaves(3));
     }
 
+    // POST
     @PostMapping("/post")
     public ResponseEntity<Object> post(@RequestBody PostRequestDto reqDto, HttpServletRequest request) {
         if (!reqDto.isValid()) {
@@ -60,6 +61,7 @@ public class PostController {
         }
     }
 
+    // PATCH
     @RequestMapping(value = "/post/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<Object> postPatch(@RequestBody PostRequestDto reqDto, @PathVariable String id, HttpServletRequest request) {
         if (!reqDto.isValid()) {

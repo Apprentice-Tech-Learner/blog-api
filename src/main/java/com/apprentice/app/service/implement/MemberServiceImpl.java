@@ -28,11 +28,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public String signUp(MemberRequestDto reqDto) {
         return memberRepository.save(reqDto.toEntity()).getId();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public TokenResponseDto login(MemberRequestDto reqDto) {
         //authenticated 가 false인 token
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(reqDto.getId(), reqDto.getPassword());
