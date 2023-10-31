@@ -1,5 +1,6 @@
 package com.apprentice.app.config.security;
 
+import com.apprentice.app.filter.ExceptionHandlerFilter;
 import com.apprentice.app.filter.JwtAuthFilter;
 import com.apprentice.app.service.domain.token.TokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +32,12 @@ public class SpringSecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/post/**").hasRole("USER")
+                .antMatchers("/series/**").hasRole("USER")
+                .antMatchers("/upload").hasRole("USER")
                 .anyRequest().authenticated()
                 .and()
-                .addFilterBefore(new JwtAuthFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new ExceptionHandlerFilter(), JwtAuthFilter.class);
         return http.build();
     }
 

@@ -1,6 +1,7 @@
 package com.apprentice.app.api.controller;
 
 import com.apprentice.app.service.domain.member.MemberRequestDto;
+import com.apprentice.app.service.domain.token.TokenRequestDto;
 import com.apprentice.app.service.domain.token.TokenResponseDto;
 import com.apprentice.app.service.interfaces.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,17 @@ public class LoginController {
         TokenResponseDto result = memberService.login(reqDto);
         if (result == null) {
             return ResponseEntity.status(401).body("계정정보가 일치하지 않습니다.");
+        } else {
+            return ResponseEntity.ok()
+                    .body(result);
+        }
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<Object> refresh(@RequestBody TokenRequestDto reqDto) {
+        TokenResponseDto result = memberService.login(memberService.search(reqDto.getUser_id()));
+        if (result == null) {
+            return ResponseEntity.status(401).body("유효하지 않은 아이디입니다.");
         } else {
             return ResponseEntity.ok()
                     .body(result);

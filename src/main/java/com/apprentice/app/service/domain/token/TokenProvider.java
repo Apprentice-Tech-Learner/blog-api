@@ -44,8 +44,10 @@ public class TokenProvider {
                 .signWith(jwtSecretKey, SignatureAlgorithm.HS256)
                 .compact();
 
+        Date refreshTokenExpiresIn = new Date(now + ACCESS_TOKEN_VALID_PERIOD * 30);
         String refreshToken = Jwts.builder()
-                .setExpiration(accessTokenExpiresIn)
+                .setSubject("refreshToken")
+                .setExpiration(refreshTokenExpiresIn)
                 .signWith(jwtSecretKey, SignatureAlgorithm.HS256)
                 .compact();
 
@@ -73,22 +75,11 @@ public class TokenProvider {
     }
 
     public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder().setSigningKey(jwtSecretKey).build().parseClaimsJws(token);
-            return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT Token", e);
-        } catch (ExpiredJwtException e) {
-            log.info("Expired JWT Token", e);
-        } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token", e);
-        } catch (IllegalArgumentException e) {
-            log.info("JWT claims string is empty", e);
-        }
-        return false;
+        Jwts.parserBuilder().setSigningKey(jwtSecretKey).build().parseClaimsJws(token);
+        return true;
     }
 
-    private Claims parseClaims(String accessToken) {
+    public Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder().setSigningKey(jwtSecretKey).build()
                     .parseClaimsJws(accessToken).getBody();

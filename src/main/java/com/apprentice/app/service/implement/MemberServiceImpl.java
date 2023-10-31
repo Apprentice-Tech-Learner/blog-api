@@ -42,4 +42,16 @@ public class MemberServiceImpl implements MemberService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         return tokenProvider.generateJWT(authentication);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public MemberRequestDto search(String id) {
+        Member mem = memberRepository.findById(id).orElseThrow(()
+                -> new IllegalArgumentException("해당 아이디가 존재하지 않습니다."));
+
+        return MemberRequestDto.builder()
+                .id(mem.getId())
+                .password(mem.getPassword())
+                .build();
+    }
 }

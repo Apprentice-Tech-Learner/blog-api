@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MemberResponseDto {
     private String id;
-
-    public MemberResponseDto(String id) {
-        this.id = id;
-    }
+    private String password;
+    private String name;
+    private String email;
+    private String contact;
 }

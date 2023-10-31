@@ -6,7 +6,10 @@ import com.apprentice.app.service.domain.member.MemberResponseDto;
 import com.apprentice.app.service.domain.token.TokenResponseDto;
 
 public interface MemberService {
+    //SELECT
     boolean isExistId(String id);
-    String signUp(MemberRequestDto reqDto);
     TokenResponseDto login(MemberRequestDto reqDto);
+    MemberRequestDto search(String id);
+    //INSET
+    String signUp(MemberRequestDto reqDto);
 }
