@@ -1,7 +1,8 @@
 package com.apprentice.app.service.domain.PostSeries;
 
-import lombok.ToString;
+import lombok.*;
 
+@Getter
 @ToString
 public class PostSeriesRequestDto {
     private String series_name;

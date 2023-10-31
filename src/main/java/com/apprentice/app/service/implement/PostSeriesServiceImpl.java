@@ -28,7 +28,10 @@ public class PostSeriesServiceImpl implements PostSeriesService {
     @Override
     @Transactional(readOnly = true)
     public List<PostSeriesResponseDto> searchPostSeriesByWriter(String writer) {
-        return postSeriesRepository.findAllByWriter(writer).stream()
+        List<PostSeries> res = postSeriesRepository.findAllByWriter(writer);
+        if (res.isEmpty()) return null;
+
+        return res.stream()
                 .map(PostSeriesResponseDto::new)
                 .collect(Collectors.toList());
     }

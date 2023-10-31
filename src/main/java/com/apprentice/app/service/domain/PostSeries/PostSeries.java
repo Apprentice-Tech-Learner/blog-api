@@ -22,5 +22,4 @@ public class PostSeries {
     private String series_name;
     @Column(length = 50)
     private String writer;
-    private int ord;
 }
