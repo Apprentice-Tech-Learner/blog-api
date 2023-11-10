@@ -3,6 +3,7 @@ package com.apprentice.app.service.domain.post;
 import com.apprentice.app.util.UUIDGenerator;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -37,6 +38,7 @@ public class PostRequestDto {
                 .writer(writer)
                 .status(status)
                 .description(description)
+                .updated(LocalDateTime.now())
                 .build();
     }
 }

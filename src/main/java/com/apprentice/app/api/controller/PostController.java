@@ -97,7 +97,7 @@ public class PostController {
             return ResponseEntity.ok().body("ok");
         }
     }
-    //TODO post - patch 기능 체크
+
     // PATCH
     @RequestMapping(value = "/post/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<Object> postPatch(@RequestBody PostRequestDto reqDto, @PathVariable String id, HttpServletRequest request) {

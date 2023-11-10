@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class Post extends BaseTimeEntity {
     private String description;
     private int hits;
     private int likes;
+    private LocalDateTime updated;
 
     @JsonIgnore
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
@@ -46,5 +48,6 @@ public class Post extends BaseTimeEntity {
         this.thumbnail = dto.getThumbnail();
         this.status = dto.getStatus();
         this.description = dto.getDescription();
+        this.updated = LocalDateTime.now();
     }
 }
