@@ -5,9 +5,12 @@ import com.apprentice.app.service.domain.tag.*;
 import com.apprentice.app.service.interfaces.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -70,6 +73,15 @@ public class PostServiceImpl implements PostService {
         }
 
         return id;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PostResponseDto> searchPostByUpdatedPaging(LocalDateTime from, LocalDateTime to, PageRequest request) {
+        return postRepository.findSliceByUpdatedBetweenAndStatus(from, to, request, 1)
+                .stream()
+                .map(PostResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     @Override

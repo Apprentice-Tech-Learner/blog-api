@@ -8,10 +8,17 @@ import com.apprentice.app.service.interfaces.PostService;
 import com.apprentice.app.util.TokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -23,8 +30,38 @@ public class PostController {
     private final PostService postService;
 
     // GET
+    @GetMapping("/post")
+    public ResponseEntity<Object> post_all(@RequestParam("type") String type, @RequestParam("period") String period,
+                                           @RequestParam("offset") int offset, @RequestParam("limit") int limit) {
+        LocalDateTime from;
+        LocalDateTime to = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59));
+        if (period.equals("today")) { // 하루
+            from = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(0, 0, 0));
+        } else if (period.equals("week")) { // 주간
+            from = LocalDateTime.of(LocalDate.now().minusWeeks(1), LocalTime.of(0, 0, 0));
+        } else if (period.equals("month")) { //월간
+            from = LocalDateTime.of(LocalDate.now().minusMonths(1), LocalTime.of(0, 0, 0));
+        } else { //연간
+            from = LocalDateTime.of(LocalDate.now().minusYears(1), LocalTime.of(0, 0, 0));
+        }
+
+        List<PostResponseDto> result = null;
+        if (type.equals("trend")) {
+            PageRequest pageReq = PageRequest.of(offset - 1, limit, Sort.by("hits").descending()); // offset은 0부터 시작
+            result = postService.searchPostByUpdatedPaging(from, to, pageReq);
+        } else if (type.equals("recent")) {
+            PageRequest pageReq = PageRequest.of(offset - 1, limit, Sort.by("updated").descending());
+            result = postService.searchPostByUpdatedPaging(from, to, pageReq);
+        } else if (type.equals("follow")) {
+            //TODO : 계정의 follow 계정 정보 기능 구성 후 작업
+        }
+
+        if (result == null || result.isEmpty()) return ResponseEntity.badRequest().body("nodata");
+        return ResponseEntity.ok().body(result);
+    }
+
     @GetMapping("/post/{id}")
-    public ResponseEntity<Object> post(@PathVariable String id) {
+    public ResponseEntity<Object> post_select(@PathVariable String id) {
         PostDetailResponseDto result;
 
         try {
@@ -60,7 +97,7 @@ public class PostController {
             return ResponseEntity.ok().body("ok");
         }
     }
-
+    //TODO post - patch 기능 체크
     // PATCH
     @RequestMapping(value = "/post/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<Object> postPatch(@RequestBody PostRequestDto reqDto, @PathVariable String id, HttpServletRequest request) {

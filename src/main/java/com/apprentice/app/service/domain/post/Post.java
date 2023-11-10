@@ -33,6 +33,8 @@ public class Post extends BaseTimeEntity {
     private Integer series;
     @Column(length = 400)
     private String description;
+    private int hits;
+    private int likes;
 
     @JsonIgnore
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
