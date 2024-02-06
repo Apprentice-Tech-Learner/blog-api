@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,6 +34,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private String email;
     @Column(length = 20)
     private String contact;
+    private LocalDateTime updated;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default

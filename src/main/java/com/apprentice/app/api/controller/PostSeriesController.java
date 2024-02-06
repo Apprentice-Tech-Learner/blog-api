@@ -1,7 +1,7 @@
 package com.apprentice.app.api.controller;
 
-import com.apprentice.app.service.domain.PostSeries.PostSeriesRequestDto;
-import com.apprentice.app.service.domain.PostSeries.PostSeriesResponseDto;
+import com.apprentice.app.service.domain.postSeries.PostSeriesRequestDto;
+import com.apprentice.app.service.domain.postSeries.PostSeriesResponseDto;
 import com.apprentice.app.service.domain.token.TokenProvider;
 import com.apprentice.app.service.interfaces.PostSeriesService;
 import com.apprentice.app.util.TokenUtil;

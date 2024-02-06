@@ -2,6 +2,8 @@ package com.apprentice.app.service.domain.member;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 @ToString
@@ -21,6 +23,7 @@ public class MemberRequestDto {
                 .name(name)
                 .email(email)
                 .contact(contact)
+                .updated(LocalDateTime.now())
                 .build();
     }
 }

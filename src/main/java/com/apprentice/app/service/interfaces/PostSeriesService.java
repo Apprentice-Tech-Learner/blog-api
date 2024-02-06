@@ -1,7 +1,7 @@
 package com.apprentice.app.service.interfaces;
 
-import com.apprentice.app.service.domain.PostSeries.PostSeriesRequestDto;
-import com.apprentice.app.service.domain.PostSeries.PostSeriesResponseDto;
+import com.apprentice.app.service.domain.postSeries.PostSeriesRequestDto;
+import com.apprentice.app.service.domain.postSeries.PostSeriesResponseDto;
 
 import java.util.List;
 

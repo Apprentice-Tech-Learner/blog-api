@@ -1,8 +1,8 @@
 package com.apprentice.app.service.domain.post;
 
 import com.apprentice.app.service.domain.common.BaseTimeEntity;
+import com.apprentice.app.service.domain.postLike.PostLike;
 import com.apprentice.app.service.domain.tag.PostTag;
-import com.apprentice.app.service.domain.tag.Tag;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -35,12 +35,15 @@ public class Post extends BaseTimeEntity {
     @Column(length = 400)
     private String description;
     private int hits;
-    private int likes;
     private LocalDateTime updated;
 
     @JsonIgnore
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private List<PostTag> tags = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    private List<PostLike> likes = new ArrayList<>();
 
     public void update(PostRequestDto dto) {
         this.title = dto.getTitle();

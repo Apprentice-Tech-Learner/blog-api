@@ -1,4 +1,4 @@
-package com.apprentice.app.service.domain.PostSeries;
+package com.apprentice.app.service.domain.postSeries;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

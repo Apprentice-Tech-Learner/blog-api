@@ -1,5 +1,6 @@
 package com.apprentice.app.service.domain.post;
 
+import com.apprentice.app.service.domain.postLike.PostLike;
 import com.apprentice.app.service.domain.tag.PostTag;
 import lombok.Getter;
 
@@ -17,6 +18,8 @@ public class PostDetailResponseDto {
     private String description;
     private LocalDateTime created;
     private List<PostTag> tags;
+    private long likes;
+    private boolean be_liked;
 
     public PostDetailResponseDto(Post entity) {
         this.post_id = entity.getPost_id();
@@ -28,5 +31,10 @@ public class PostDetailResponseDto {
         this.description = entity.getDescription();
         this.created = entity.getCreated();
         this.tags = entity.getTags();
+    }
+
+    public void setLikeInfo(long cnt, boolean isLiked) {
+        this.likes = cnt;
+        this.be_liked = isLiked;
     }
 }

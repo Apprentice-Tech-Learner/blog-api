@@ -21,7 +21,7 @@ public class PostResponseDto {
     private LocalDateTime created;
     private LocalDateTime updated;
     private int hits;
-    private int likes;
+    private long likes;
 
     public PostResponseDto(Post entity) {
         this.post_id = entity.getPost_id();
@@ -34,6 +34,6 @@ public class PostResponseDto {
         this.created = entity.getCreated();
         this.updated = entity.getUpdated();
         this.hits = entity.getHits();
-        this.likes = entity.getLikes();
+        this.likes = entity.getLikes().size();
     }
 }

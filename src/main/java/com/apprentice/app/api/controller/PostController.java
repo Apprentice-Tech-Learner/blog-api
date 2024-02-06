@@ -3,6 +3,8 @@ package com.apprentice.app.api.controller;
 import com.apprentice.app.service.domain.post.PostDetailResponseDto;
 import com.apprentice.app.service.domain.post.PostRequestDto;
 import com.apprentice.app.service.domain.post.PostResponseDto;
+import com.apprentice.app.service.domain.postLike.PostLikeId;
+import com.apprentice.app.service.domain.postLike.PostLikeRequestDto;
 import com.apprentice.app.service.domain.token.TokenProvider;
 import com.apprentice.app.service.interfaces.PostService;
 import com.apprentice.app.util.TokenUtil;
@@ -61,11 +63,13 @@ public class PostController {
     }
 
     @GetMapping("/post/{id}")
-    public ResponseEntity<Object> post_select(@PathVariable String id) {
+    public ResponseEntity<Object> post_select(@PathVariable String id, HttpServletRequest request) {
         PostDetailResponseDto result;
 
+        String user = tokenProvider.getAuthentication(TokenUtil.resolveToken(request)).getName();
+
         try {
-            result = postService.searchPostDetail(id);
+            result = postService.searchPostDetail(id, user);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("포스트가 존재하지 않습니다.");
         }
@@ -98,6 +102,23 @@ public class PostController {
         }
     }
 
+    @RequestMapping(value = "/post/{id}/like", method = RequestMethod.POST)
+    public ResponseEntity<Object> postLike(@PathVariable String id, HttpServletRequest request) {
+        if (id == null || id.isEmpty()) {
+            return ResponseEntity.badRequest().body("포스트 아이디를 입력해주세요.");
+        }
+
+        String user = tokenProvider.getAuthentication(TokenUtil.resolveToken(request)).getName();
+
+        String res_id = postService.writePostLike(PostLikeRequestDto.builder().post_id(id).member_id(user).build());
+
+        if (res_id == null || res_id.isEmpty()) {
+            return ResponseEntity.badRequest().body("좋아요 등록에 실패하였습니다. 잠시 후 다시 이용해주세요.");
+        } else {
+            return ResponseEntity.ok().body("ok");
+        }
+    }
+
     // PATCH
     @RequestMapping(value = "/post/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<Object> postPatch(@RequestBody PostRequestDto reqDto, @PathVariable String id, HttpServletRequest request) {
@@ -120,6 +141,35 @@ public class PostController {
 
         if (editedId == null || editedId.isEmpty()) {
             return ResponseEntity.badRequest().body("수정에 실패하였습니다. 잠시 후 다시 이용해주세요.");
+        } else {
+            return ResponseEntity.ok().body("ok");
+        }
+    }
+
+    //DELETE
+    @RequestMapping(value = "/post/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> postDelete(@PathVariable String id) {
+        if (id == null || id.isEmpty()) {
+            return ResponseEntity.badRequest().body("포스트 아이디를 입력해주세요.");
+        }
+
+        //TODO : 삭제 구현 안 되있음
+
+        return ResponseEntity.ok().body("ok");
+    }
+
+    @RequestMapping(value = "/post/{id}/like", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> postUnlike(@PathVariable String id, HttpServletRequest request) {
+        if (id == null || id.isEmpty()) {
+            return ResponseEntity.badRequest().body("포스트 아이디를 입력해주세요.");
+        }
+
+        String user = tokenProvider.getAuthentication(TokenUtil.resolveToken(request)).getName();
+
+        int res_cnt = postService.deletePostLike(new PostLikeId(id, user));
+
+        if (res_cnt == 0) {
+            return ResponseEntity.badRequest().body("좋아요 취소에 실패하였습니다. 잠시 후 다시 이용해주세요.");
         } else {
             return ResponseEntity.ok().body("ok");
         }

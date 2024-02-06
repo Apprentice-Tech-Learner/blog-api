@@ -1,9 +1,9 @@
 package com.apprentice.app.service.implement;
 
-import com.apprentice.app.service.domain.PostSeries.PostSeries;
-import com.apprentice.app.service.domain.PostSeries.PostSeriesRepository;
-import com.apprentice.app.service.domain.PostSeries.PostSeriesRequestDto;
-import com.apprentice.app.service.domain.PostSeries.PostSeriesResponseDto;
+import com.apprentice.app.service.domain.postSeries.PostSeries;
+import com.apprentice.app.service.domain.postSeries.PostSeriesRepository;
+import com.apprentice.app.service.domain.postSeries.PostSeriesRequestDto;
+import com.apprentice.app.service.domain.postSeries.PostSeriesResponseDto;
 import com.apprentice.app.service.interfaces.PostSeriesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
