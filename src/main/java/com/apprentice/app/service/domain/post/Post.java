@@ -31,9 +31,9 @@ public class Post extends BaseTimeEntity {
     @Column(length = 50)
     private String writer;
     private int status;
-    private Integer series;
     @Column(length = 400)
     private String description;
+    private int series;
     private int hits;
     private LocalDateTime updated;
 
@@ -52,5 +52,6 @@ public class Post extends BaseTimeEntity {
         this.status = dto.getStatus();
         this.description = dto.getDescription();
         this.updated = LocalDateTime.now();
+        this.series = Integer.parseInt(dto.getSeries_id());
     }
 }

@@ -1,6 +1,7 @@
 package com.apprentice.app.service.domain.post;
 
 import com.apprentice.app.service.domain.postLike.PostLike;
+import com.apprentice.app.service.domain.postSeries.PostSeries;
 import com.apprentice.app.service.domain.tag.PostTag;
 import lombok.Getter;
 
@@ -14,6 +15,7 @@ public class PostDetailResponseDto {
     private String content;
     private String thumbnail;
     private String writer;
+    private PostSeries series;
     private int status;
     private String description;
     private LocalDateTime created;
@@ -36,5 +38,9 @@ public class PostDetailResponseDto {
     public void setLikeInfo(long cnt, boolean isLiked) {
         this.likes = cnt;
         this.be_liked = isLiked;
+    }
+
+    public void setPostSeries(PostSeries series) {
+        this.series = series;
     }
 }

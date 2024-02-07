@@ -1,13 +1,8 @@
 package com.apprentice.app.service.domain.post;
 
-import com.apprentice.app.service.domain.tag.PostTag;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 public class PostResponseDto {

@@ -98,7 +98,7 @@ public class PostController {
         if (id == null || id.isEmpty()) {
             return ResponseEntity.badRequest().body("입력에 실패하였습니다. 잠시 후 다시 이용해주세요.");
         } else {
-            return ResponseEntity.ok().body("ok");
+            return ResponseEntity.ok().body(id);
         }
     }
 
@@ -142,7 +142,7 @@ public class PostController {
         if (editedId == null || editedId.isEmpty()) {
             return ResponseEntity.badRequest().body("수정에 실패하였습니다. 잠시 후 다시 이용해주세요.");
         } else {
-            return ResponseEntity.ok().body("ok");
+            return ResponseEntity.ok().body(editedId);
         }
     }
 
