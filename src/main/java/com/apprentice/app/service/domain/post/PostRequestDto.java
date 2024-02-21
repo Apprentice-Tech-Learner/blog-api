@@ -36,6 +36,7 @@ public class PostRequestDto {
                 .content(content)
                 .thumbnail(thumbnail)
                 .writer(writer)
+                .series(Integer.parseInt(series_id))
                 .status(status)
                 .description(description)
                 .updated(LocalDateTime.now())

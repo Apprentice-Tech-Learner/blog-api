@@ -7,6 +7,7 @@ import com.apprentice.app.service.domain.postLike.PostLikeRepository;
 import com.apprentice.app.service.domain.postLike.PostLikeRequestDto;
 import com.apprentice.app.service.domain.postSeries.PostSeries;
 import com.apprentice.app.service.domain.postSeries.PostSeriesRepository;
+import com.apprentice.app.service.domain.postSeries.PostSeriesResponseDto;
 import com.apprentice.app.service.domain.tag.*;
 import com.apprentice.app.service.interfaces.PostService;
 import lombok.RequiredArgsConstructor;
@@ -139,11 +140,12 @@ public class PostServiceImpl implements PostService {
         PostDetailResponseDto result = new PostDetailResponseDto(post);
         long likeCount = postLikeRepository.countByPost(post);
         boolean isLiked = postLikeRepository.existsById(new PostLikeId(post.getPost_id(), user));
-
-        PostSeries series = postSeriesRepository.findById(post.getSeries()).get();
-        result.setPostSeries(series);
-
         result.setLikeInfo(likeCount, isLiked);
+
+        PostSeriesResponseDto series = new PostSeriesResponseDto(postSeriesRepository.findById(post.getSeries()).get());
+        List<PostResponseDto> seriesList = postRepository.findAllBySeries(post.getSeries()).stream().map(PostResponseDto::new).collect(Collectors.toList());
+        series.setSeriesList(seriesList);
+        result.setPostSeries(series);
 
         return result;
     }

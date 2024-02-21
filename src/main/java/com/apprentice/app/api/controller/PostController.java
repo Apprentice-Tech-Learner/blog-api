@@ -58,7 +58,7 @@ public class PostController {
             //TODO : 계정의 follow 계정 정보 기능 구성 후 작업
         }
 
-        if (result == null || result.isEmpty()) return ResponseEntity.badRequest().body("nodata");
+        if (result == null || result.isEmpty()) return ResponseEntity.ok().body("nodata");
         return ResponseEntity.ok().body(result);
     }
 

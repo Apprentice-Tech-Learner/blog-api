@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, String> {
     List<Post> findAllByStatus(int status);
+    List<Post> findAllBySeries(int series);
     @Query("SELECT DISTINCT p FROM Post p LEFT OUTER JOIN FETCH p.tags t WHERE p.post_id = :id")
     Post findByIdUsingFetchJoin(String id);
 
