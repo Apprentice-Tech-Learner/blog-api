@@ -6,6 +6,7 @@ import com.apprentice.app.service.domain.token.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,6 +32,7 @@ public class SpringSecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/login/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/post/**").permitAll()
                 .antMatchers("/post/**").hasRole("USER")
                 .antMatchers("/series/**").hasRole("USER")
                 .antMatchers("/upload").hasRole("USER")

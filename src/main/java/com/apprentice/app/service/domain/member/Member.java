@@ -34,6 +34,10 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private String email;
     @Column(length = 20)
     private String contact;
+    @Column(length = 400)
+    private String about_me;
+    @Column(length = 2048)
+    private String profile_image;
     private LocalDateTime updated;
 
     @ElementCollection(fetch = FetchType.EAGER)

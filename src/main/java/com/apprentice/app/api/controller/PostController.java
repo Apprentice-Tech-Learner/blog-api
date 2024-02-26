@@ -74,8 +74,12 @@ public class PostController {
             return ResponseEntity.badRequest().body("포스트가 존재하지 않습니다.");
         }
 
-        if (result == null) return ResponseEntity.badRequest().body("존재하지 않는 포스트입니다.");
-        return ResponseEntity.ok().body(result);
+        if (result == null) {
+            return ResponseEntity.badRequest().body("존재하지 않는 포스트입니다.");
+        } else {
+            result.setRelation(user);
+            return ResponseEntity.ok().body(result);
+        }
     }
 
     @GetMapping("/post/saves")

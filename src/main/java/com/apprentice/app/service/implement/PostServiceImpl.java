@@ -1,5 +1,7 @@
 package com.apprentice.app.service.implement;
 
+import com.apprentice.app.service.domain.member.MemberRepository;
+import com.apprentice.app.service.domain.member.MemberResponseDto;
 import com.apprentice.app.service.domain.post.*;
 import com.apprentice.app.service.domain.postLike.PostLike;
 import com.apprentice.app.service.domain.postLike.PostLikeId;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -28,6 +31,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final TagRepository tagRepository;
+    private final MemberRepository memberRepository;
     private final PostTagRepository postTagRepository;
     private final PostLikeRepository postLikeRepository;
     private final PostSeriesRepository postSeriesRepository;
@@ -58,6 +62,13 @@ public class PostServiceImpl implements PostService {
 
             tagList.add(data);
         }
+
+        if (reqDto.getSeries_id() != null) {
+            Optional<PostSeries> series = postSeriesRepository.findById(reqDto.getSeries_id());
+            series.ifPresent(reqDto::setSeries);
+        }
+
+        log.info("시리즈 검색 통과");
 
         Post post = postRepository.save(reqDto.toEntity());
         for (Tag tag : tagList) {
@@ -138,14 +149,24 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findByIdUsingFetchJoin(id);
 
         PostDetailResponseDto result = new PostDetailResponseDto(post);
+
+        //좋아요 정보
         long likeCount = postLikeRepository.countByPost(post);
         boolean isLiked = postLikeRepository.existsById(new PostLikeId(post.getPost_id(), user));
         result.setLikeInfo(likeCount, isLiked);
 
-        PostSeriesResponseDto series = new PostSeriesResponseDto(postSeriesRepository.findById(post.getSeries()).get());
-        List<PostResponseDto> seriesList = postRepository.findAllBySeries(post.getSeries()).stream().map(PostResponseDto::new).collect(Collectors.toList());
-        series.setSeriesList(seriesList);
-        result.setPostSeries(series);
+        //시리즈 정보
+        if (post.getSeries() != null) {
+            PostSeries ps = postSeriesRepository.findById(post.getSeries().getSeries_id()).get();
+            PostSeriesResponseDto series = new PostSeriesResponseDto(ps);
+            List<PostResponseDto> seriesList = postRepository.findAllBySeries(ps).stream().map(PostResponseDto::new).collect(Collectors.toList());
+            series.setSeriesList(seriesList);
+            result.setPostSeries(series);
+        }
+
+        //작성자 정보
+        MemberResponseDto postUser = new MemberResponseDto(memberRepository.findById(post.getWriter()).get());
+        result.setUser(postUser);
 
         return result;
     }
